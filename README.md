@@ -30,7 +30,9 @@ python3 -m pip install -U git+https://github.com/RomoloPoliti-INAF/tlmCleaner.gi
 The standard usage is:
 
 ```console
- Usage: tlmCleaner [OPTIONS] FILENAME   
+Usage: tlmCleaner [OPTIONS] FILENAME   
+
+Options:
 
  --output     -o  FILE     Output file
  --apids      -a  FILE     APID list
