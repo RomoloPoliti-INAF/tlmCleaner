@@ -1,0 +1,27 @@
+[project]
+name = "tlmCleaner"
+authors = [{name = "Romolo Politi", email = "romolo.politi@inaf.it"}]
+version = "0.8.0"
+requires-python = ">=3.11"
+dependencies = [
+    "SCOSPy",
+    "rich-click",
+    "MyCommonLib@git+https://github.com/RomoloPoliti-INAF/myCommonLib"
+]
+
+license = {text = "GNU GPL ver3"} 
+readme = "README.md"
+
+[project.urls]
+Repository = "https://github.com/RomoloPoliti-INAF/tlmCleaner"
+Changelog = "https://github.com/RomoloPoliti-INAF/tlmCleaner/CHANGELOG.md"
+
+
+[project.optional-dependencies]
+docs = ["sphinx"]
+dev = [
+    "pytest"
+]
+
+[project.scripts]
+tlmCleaner = "tlmCleaner.__main__:action"
