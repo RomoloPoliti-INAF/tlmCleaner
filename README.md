@@ -8,7 +8,7 @@ Remove duplicated packets from spacecraft telemtry comparing the Source Sequence
 
 You can install tlmCleaner in two different ways:
 
-> ![NOTE]
+> [!NOTE]
 > The installation using pip will be available soon
 
 2. cloning the repository:
