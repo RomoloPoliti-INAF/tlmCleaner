@@ -2,7 +2,7 @@
 name = "tlmCleaner"
 authors = [{name = "Romolo Politi", email = "romolo.politi@inaf.it"}]
 version = "0.9.0"
-requires-python = ">=3.11"
+requires-python = ">=3.10"
 dependencies = [
     "SCOSPy",
     "rich-click",
