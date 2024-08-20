@@ -28,7 +28,7 @@ from tlmCleaner.configure import conf
 
 # from progress.bar import Bar
 
-__version__ = Vers((0, 8, 0, 'f', 1)).full()
+__version__ = Vers((0, 9, 0, 'f', 1)).full()
 
 click.rich_click.USE_RICH_MARKUP = True
 click.rich_click.FOOTER_TEXT = progEpilog
@@ -159,7 +159,7 @@ class apid():
         return
 
 
-def tlmClean(fileName: Path, output: str = None, apidList:Path=None, extern: Path = None,
+def tlmClean(fileName: Path, output: str = None, apidList:dict=None, extern: Path = None,
              summarize: bool = False):
 
     # if not log:

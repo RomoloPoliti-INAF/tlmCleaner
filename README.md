@@ -1,5 +1,5 @@
 # tlmCleaner
-![Version 0.8.0](https://img.shields.io/badge/version-0.8.0-blue?style=plastic)
+![Version 0.9.0](https://img.shields.io/badge/version-0.9.0-blue?style=plastic)
 ![Language Python 3.12-1](https://img.shields.io/badge/python-3.12.1-orange?style=plastic&logo=python)
 
 Remove duplicated packets from spacecraft telemtry comparing the Source Sequence Count and filter the packets by APID (Application Process IDentifier).

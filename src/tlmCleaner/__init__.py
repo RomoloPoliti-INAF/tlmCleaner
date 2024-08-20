@@ -1,0 +1,1 @@
+from tlmCleaner.__main__ import tlmClean
