@@ -4,6 +4,8 @@
 2024-08-20
 
 - fix packetization
+- admit external configuration
+- fix apid class kill method
 
 ##  Version 0.8.0
 2024-01-06

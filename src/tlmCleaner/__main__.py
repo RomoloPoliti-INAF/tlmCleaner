@@ -24,7 +24,7 @@ from rich.progress import Progress
 from rich.table import Table
 from SCOS.SCOS import *
 
-from tlmCleaner.configure import conf
+from tlmCleaner.configure import Conf
 
 # from progress.bar import Bar
 
@@ -56,7 +56,7 @@ def do_it(ctx, param, value):
         value.mkdir(parents=True)
     return value
 
-def mkTmpFolder(tp=None):
+def mkTmpFolder(tp=None, conf:Conf=Conf()):
     message = "Creating the folder"
     if tp is None:
 
@@ -69,9 +69,9 @@ def mkTmpFolder(tp=None):
 
 
 class ApidList:
-    def __init__(self,apidList:dict, pt) -> None:
+    def __init__(self,apidList:dict, pt,conf) -> None:
         for item in apidList:
-            setattr(self, item, apid(apidList[item]['name'], apidList[item]['apid'], pt))
+            setattr(self, item, apid(apidList[item]['name'], apidList[item]['apid'], pt,conf))
         # self.apid801 = apid("Telecommand", 801, pt)
         # self.apid804 = apid("Housekeeping", 804, pt)
         # self.apid807 = apid("Event_Report", 807, pt)
@@ -104,7 +104,7 @@ class ApidList:
 
 
 class apid():
-    def __init__(self, name, apid, pt):
+    def __init__(self, name, apid, pt,conf):
         self.lastSSC = None
         self.lastSCET = None
         self.listSSC = []
@@ -115,14 +115,17 @@ class apid():
         self.apid = apid
         self.outpath = pt
         if not Path(self.outpath).exists():
-            mkTmpFolder(tp=self.outpath)
+            mkTmpFolder(tp=self.outpath,conf=conf)
         self.fileid = open(self.outpath.joinpath(self.fname()), FMODE.WRITE)
         self.fileid.write("FillingTime,SSC,XMLCount\n")
 
     def kill(self):
         self.fileid.close()
         if len(self.listSSC) == 0:
-            self.outpath.joinpath(self.fname()).unlink()
+            tmpname = self.outpath.joinpath(self.fname())
+            if tmpname.exists():
+                tmpname.unlink()
+
         del self
 
     def check(self, pk, id):
@@ -136,7 +139,7 @@ class apid():
                 pk.CPH.FilingTime, pk.TMPH.PUSSSC, id))
             return True
 
-    def summarize(self):
+    def summarize(self,conf):
         table = Table.grid()
         table.add_column(style='green')
         table.add_column()
@@ -160,13 +163,15 @@ class apid():
 
 
 def tlmClean(fileName: Path, output: str = None, apidList:dict=None, extern: Path = None,
-             summarize: bool = False):
+             conf:Conf=Conf(),summarize: bool = False):
 
     # if not log:
     #     log = logInit(logFile, 'SIMBIO-SYS clean', logging.INFO, FMODE.WRITE)
     # if debug:
     #     log.setLevel(logging.DEBUG)
     conf.log.info("Start tlmClean")
+    if isinstance(fileName, str):
+        fileName = Path(fileName)
     if not fileName.exists():
         conf.log.critical("The file {fileName} not exists")
         raise SystemExit(1)
@@ -187,7 +192,7 @@ def tlmClean(fileName: Path, output: str = None, apidList:dict=None, extern: Pat
     outRoot = ET.ElementTree(top)
     child1 = ET.SubElement(top, 'Response')
     child2 = ET.SubElement(child1, 'PktRawResponse')
-    ap = ApidList(apidList,extern)
+    ap = ApidList(apidList,extern,conf)
     with Progress(*progresSet, console=conf.console) as progr:
 
         taskClean = progr.add_task("Processing Packets: ", total=len(
@@ -208,7 +213,7 @@ def tlmClean(fileName: Path, output: str = None, apidList:dict=None, extern: Pat
     outRoot.write(output, encoding='utf-8', xml_declaration=True)
 
     if summarize:
-        ap.summarize()
+        ap.summarize(conf)
     ap.kill()
     conf.log.info("End tlmClean", verbosity=1)
     return output
@@ -228,7 +233,7 @@ def tlmClean(fileName: Path, output: str = None, apidList:dict=None, extern: Pat
 def action(filename: Path, output: str, apids:Path,  summarize: bool,  logFile: Path, debug: bool = False, verbose: int = 0):
     """Telemetry Filter"""
     fileName = Path(filename)
-    
+    conf=Conf()
     
     if type(logFile) is str:
         logFile = Path(logFile).expanduser()
@@ -252,7 +257,7 @@ def action(filename: Path, output: str, apids:Path,  summarize: bool,  logFile: 
     #     ret = conf.read_file_base(config)
     conf.debug = debug
     conf.verbose = verbose
-    tlmClean(fileName, output, apidList, summarize=summarize)
+    tlmClean(fileName, output, apidList, conf=conf,summarize=summarize)
 
     pass
 
