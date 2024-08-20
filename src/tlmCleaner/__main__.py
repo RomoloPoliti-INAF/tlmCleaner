@@ -32,8 +32,7 @@ __version__ = Vers((0, 9, 0, 'f', 1)).full()
 
 click.rich_click.USE_RICH_MARKUP = True
 click.rich_click.FOOTER_TEXT = progEpilog
-click.rich_click.HEADER_TEXT = f"Telemetry Cleaner, version [blue]{
-    __version__}[/blue]"
+click.rich_click.HEADER_TEXT = f"Telemetry Cleaner, version [blue]{__version__}[/blue]"
 
 # Panel color Setup
 class COLOR:
